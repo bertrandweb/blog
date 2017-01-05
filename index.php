@@ -9,10 +9,13 @@ spl_autoload_register("Autoload::classeAutoloader");
 
 //$database = new Database();
 $users = new Users();
-//$article = new Article();
-$users -> Inscription();
+
+//$users -> Inscription();
 var_dump($users);
 
+
+$article = new Article();
+var_dump($article);
 
 Log::writeCSV("sdsqd");
 
