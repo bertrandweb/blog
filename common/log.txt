@@ -1,4 +1,0 @@
-ttest
-test
-test
-test

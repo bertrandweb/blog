@@ -13,6 +13,7 @@ function addlog($errtxt)
   fclose($fp);
   }
 }
-
 $date = new logs();
 $date -> addlog("test");
+
+
