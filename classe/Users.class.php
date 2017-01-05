@@ -12,10 +12,10 @@ class Users
     protected $admin;
 
 
-    public function __construct($bdd)
-    {
-    $this -> bdd = $bdd;
-    }
+//    public function __construct($bdd)
+//    {
+//    $this -> bdd = $bdd;
+//    }
 
     protected function Inscription() {
 
@@ -33,7 +33,7 @@ class Users
     if(isset($_POST['id'],$_POST['nom'],$_POST['prenom'],$_POST['email'],$_POST['pseudo'])) {
         if(!isset($_POST['id']) || $_POST['id']=="")
         {
-        $req=$instance->prepare('INSERT INTO user(nom, prenom, email, password, pseudo) VALUES (:nom, :prenom, :email, :password, :pseudo)');
+        $req=$instance->prepare('INSERT INTO user(nom, prenom, email, password, pseudo) VALUES (:nom, :prenom, :email, sha1(:password), :pseudo)');
 
        $req->execute(array(
        'nom' => $_POST['nom'],
@@ -43,9 +43,9 @@ class Users
        'pseudo' => $_POST['pseudo'],
        ));
        }
-        else (
+        else {
             echo "Erreur !";
-        )
+        }
     }
     }
 
@@ -91,17 +91,23 @@ class Users
 
     function deconnexion() {
 
-    session_unset()
+    session_unset();
 
     }
 
     function verifemail() {
 
+    $sql= "SELECT * FROM user WHERE email=:email;";
+            $resultat = $instance -> prepare($sql);
+            $resultat->execute(array(
+                'email' => $_POST['email'],
+            ));
 
-
+            $resultat=$resultat->fetch();
+            if ($resultat==$_POST['email'])
+            {
+                echo 'Email non disponible';
+            }
     }
 
-    function verifdejainscrit() {
 
-    }
-}
