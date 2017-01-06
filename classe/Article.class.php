@@ -20,12 +20,11 @@ class Article
     {
         if (isset($_POST['titre'], $_POST['contenu'], $_POST['date'], $_POST['auteur']))
         {
-            $req = $instance->prepare("INSERT INTO article (titre, contenu, date, auteur) VALUES (:titre, :contenu, :date, :auteur)");
+            $req = $instance->prepare("INSERT INTO article (titre, contenu, date, auteur) VALUES (:titre, :contenu, now(), :auteur)");
 
             $req->execute(array(
                 'article' => $_POST['article'],
                 'contenu' => $_POST['contenu'],
-                'date' => $_POST['date'],
                 'auteur' => $_POST['auteur'],
                 ));
         }

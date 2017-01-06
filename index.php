@@ -17,6 +17,8 @@ spl_autoload_register("Autoload::classeAutoloader");
 $user = new Users();
 $user -> Inscription();
 
+$user -> Connexion();
+
 
 //include("./functions/functionUsers.php");
 //include("./functions/functionContent.php");

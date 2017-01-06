@@ -40,7 +40,7 @@ class Users
             require('./templates/forminscription.php');
     }
 
-    public function connexion()
+    public function Connexion()
     {
 
         if (isset($_POST['email'], $_POST['password']) && (($_POST['email'] != "") && $_POST['email'] != ""))
