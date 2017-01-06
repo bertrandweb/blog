@@ -7,17 +7,15 @@ spl_autoload_register("Autoload::classeAutoloader");
 //$test = new jeanmichel();
 //var_dump($test);
 
-//$database = new Database();
-//$users = new Users();
-
 //$users -> Inscription();
 //var_dump($users);
 
 
-$article = new Article();
-$article -> displayarticle(1);
+//$article = new Article();
+//$article -> displayarticle(1);
 
-
+$user = new Users();
+$user -> Inscription();
 
 
 //include("./functions/functionUsers.php");

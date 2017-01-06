@@ -2,7 +2,7 @@
 
 class Users
 {
-    protected $bdd;
+    protected $instance;
     protected $pseudo;
     protected $mail;
     protected $password;
@@ -12,102 +12,79 @@ class Users
     protected $admin;
 
 
-//    public function __construct($bdd)
-//    {
-//    $this -> bdd = $bdd;
-//    }
+    public function __construct()
+    {
+        $this -> instance = new Database("root", "localhost", "", "blog");
+        $this -> instance = $this -> instance -> Database();
+    }
 
-    protected function Inscription() {
+    public function Inscription()
+    {
 
-    $user = "root";
-    $mdp = "";
-    $host = "localhost";
-    $dbName="blod";
 
-    try {
-        $instance = new PDO("mysql:host=".$host.";dbname=".$dbName,$user,$mdp);
-        }
-        catch (PDOException $e) {
-            die('Erreur :'. $e->getMessage());
-        }
-    if(isset($_POST['id'],$_POST['nom'],$_POST['prenom'],$_POST['email'],$_POST['pseudo'])) {
-        if(!isset($_POST['id']) || $_POST['id']=="")
+        if (isset($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['password'], $_POST['pseudo']))
         {
-        $req=$instance->prepare('INSERT INTO user(nom, prenom, email, password, pseudo) VALUES (:nom, :prenom, :email, sha1(:password), :pseudo)');
+            $req = $this -> instance->prepare('INSERT INTO user(nom, prenom, mail, password, pseudo) VALUES (:nom, :prenom, :email, sha1(:password), :pseudo)');
 
-       $req->execute(array(
-       'nom' => $_POST['nom'],
-       'prenom' => $_POST['prenom'],
-       'email' => $_POST['email'],
-       'password' => $_POST['password'],
-       'pseudo' => $_POST['pseudo'],
-       ));
-       }
-        else {
-            echo "Erreur !";
-        }
+            $req->execute(array(
+                  'nom' => $_POST['nom'],
+                  'prenom' => $_POST['prenom'],
+                  'email' => $_POST['email'],
+                  'password' => $_POST['password'],
+                  'pseudo' => $_POST['pseudo'],
+            ));
+        }   else
+            {
+                echo "Erreur pour inscription !";
+            }
+            require('./templates/forminscription.php');
     }
-    }
 
-    function connexion() {
+    public function connexion()
+    {
 
-        $user = "root";
-        $mdp = "";
-        $host = "localhost";
-        $dbName="magasin";
-
-        try {
-            $instance = new MYPDO("mysql:host=".$host.";dbname=".$dbName,$user,$mdp);
-        }
-        catch (PDOException $e) {
-            die('Erreur :' . $e->getMessage());
-        }
-
-        if (isset($_POST['email'],$_POST['password']) && (($_POST['email'] !="") && $_POST['email'] != ""))
+        if (isset($_POST['email'], $_POST['password']) && (($_POST['email'] != "") && $_POST['email'] != ""))
 
             $sql = "SELECT * FROM user WHERE email=:email AND password = :password";
-            $resultat = $instance -> prepare($sql);
-            $resultat->execute(array(
-                'email' => $_POST['email'],
-                'password' => $_POST['password'],
-            ));
+        $resultat = $this -> instance->prepare($sql);
+        $resultat->execute(array(
+            'email' => $_POST['email'],
+            'password' => $_POST['password'],
+        ));
 
-            $resultat=$resultat->fetch();
-            if ($resultat==false)
-            {
-                echo 'Erreur de login';
+        $resultat = $resultat->fetch();
+        if ($resultat == false) {
+            echo 'Erreur de login';
+        } else {
+            $_SESSION['id'] = $resultat['id'];
+            if ($resultat['grade_id'] == 1) {
+                $_SESSION['admin'] = true;
             }
-            else
-            {
-                $_SESSION['id']= $resultat['id'];
-                if($resultat['grade_id'] == 1)
-                {
-                    $_SESSION['admin'] = true;
-                }
-                header('location: index.php');
-            }
-    }
+            header('location: index.php');
+        }
     }
 
-    function deconnexion() {
 
-    session_unset();
+    public function deconnexion()
+    {
+
+        session_unset();
 
     }
 
-    function verifemail() {
+    function verifemail()
+    {
 
-    $sql= "SELECT * FROM user WHERE email=:email;";
-            $resultat = $instance -> prepare($sql);
-            $resultat->execute(array(
-                'email' => $_POST['email'],
-            ));
+        $sql = "SELECT * FROM user WHERE email=:email;";
+        $resultat = $this -> instance->prepare($sql);
+        $resultat->execute(array(
+            'email' => $_POST['email'],
+        ));
 
-            $resultat=$resultat->fetch();
-            if ($resultat==$_POST['email'])
-            {
-                echo 'Email non disponible';
-            }
+        $resultat = $resultat->fetch();
+        if ($resultat == $_POST['email']) {
+            echo 'Email non disponible';
+        }
     }
-
+}
 
