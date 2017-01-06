@@ -8,16 +8,17 @@ spl_autoload_register("Autoload::classeAutoloader");
 //var_dump($test);
 
 //$database = new Database();
-$users = new Users();
+//$users = new Users();
 
 //$users -> Inscription();
-var_dump($users);
+//var_dump($users);
 
 
 $article = new Article();
-var_dump($article);
+$article -> displayarticle(1);
 
-Log::writeCSV("sdsqd");
+
+
 
 //include("./functions/functionUsers.php");
 //include("./functions/functionContent.php");
